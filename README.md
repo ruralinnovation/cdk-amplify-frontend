@@ -2,17 +2,20 @@
 
 ## Running Code
 
-Copy the `.env` file to a file called `.env.local`. Update the value for
-the environment variables in `.env.local` as needed (i.e. change
+Copy the `.env` file to a file called `.env.development.local`. Update
+the value for the environment variables in `.env.development.local` as
+needed (i.e. change
 `VITE_API_BACKEND=https://frontend.ruralopportunitymap.us` to
-`VITE_API_BACKEND=http://127.0.0.1:5174` for local backend development).
+`VITE_API_BACKEND=http://127.0.0.1:5174` in order for the local
+development frontend to connect to the local backend server).
 
 *NOTE*: *If you plan on using `npm run build` to output a static version
 of the frontend to the `dist` folder, those files will also be copied
 over the `src/www` folder, which is where both the Shiny server and the
 Dockerfile source the frontend files from. So, if you have set special
-values in `.env.local` they will get copied into the static frontend
-build, and subsequently into the Docker build, so… beware of this.*
+values in `.env.development.local` they will get copied into the static
+frontend build, and subsequently into the Docker build, so… beware of
+this.*
 
 Run `npm install` to install dependencies.
 

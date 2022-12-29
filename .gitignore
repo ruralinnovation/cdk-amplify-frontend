@@ -70,7 +70,6 @@ amplify/mock-data
 amplify/mock-api-resources
 amplify/backend/amplify-meta.json
 amplify/backend/.temp
-amplify/backend/hosting/
 build/
 dist/
 node_modules/
