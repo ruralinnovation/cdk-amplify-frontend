@@ -27,7 +27,7 @@
   "scripts": {
     "dev": "VITE_API_BACKEND=http://127.0.0.1:5174 vite",
     "build": "vite build",
-    "docker": "cd src && docker build --target app --build-arg gh_token=$GITHUB_PAT -f Dockerfile -t docker.io/coriverse/shinyapps:amplify-frontend . && docker run --entrypoint Rscript -p 3000:3000 -p 3838:3838 -p 5174:5174 docker.io/coriverse/shinyapps:amplify-frontend /srv/shiny-server/frontend/.exec-shiny-app.R 5174",
+    "docker": "vite build --mode production && cd src && docker build --target app --build-arg gh_token=$GITHUB_PAT -f Dockerfile -t docker.io/coriverse/shinyapps:amplify-frontend . && docker run --entrypoint Rscript -p 3000:3000 -p 3838:3838 docker.io/coriverse/shinyapps:amplify-frontend",
     "patch": "patch-package",
     "postinstall": "npm run patch && npm install --legacy-peer-deps --no-save \"@material-ui/core\"@\"^4.12.4\"",
     "start": "cd src && Rscript .exec-shiny-app.R . 5174"
