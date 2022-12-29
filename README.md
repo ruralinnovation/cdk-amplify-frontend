@@ -1,10 +1,23 @@
 # Amplify / React Frontend Minimal Application
 
-## Running Code
+This is a base template for creating React-oriented frontend
+applications with an optional Plumber/Shiny backend. Both the frontend
+and backend will be deployed and hosted on [AWS
+Amplify](https://docs.amplify.aws/cli/usage/containers/).
 
-Copy the `.env` file to a file called `.env.development.local`. Update
-the value for the environment variables in `.env.development.local` as
-needed (i.e. change
+## Configuration
+
+If you are using
+[cdk-amplify-frontend](https://github.com/ruralinnovation/cdk-amplify-frontend)
+as a template (via the “Use this template” button in Github), clone the
+resulting repo to your local environment. The first file you should
+update is `package.json`. Change the value of the “name” property to
+reflect your project name and then run `npm install` to install
+dependencies.
+
+For local development, copy the `.env` file to a file called
+`.env.development.local`. Update the value for the environment variables
+in `.env.development.local` as needed (for instance, change
 `VITE_API_BACKEND=https://frontend.ruralopportunitymap.us` to
 `VITE_API_BACKEND=http://127.0.0.1:5174` in order for the local
 development frontend to connect to the local backend server).
@@ -17,11 +30,13 @@ values in `.env.development.local` they will get copied into the static
 frontend build, and subsequently into the Docker build, so… beware of
 this.*
 
-Run `npm install` to install dependencies.
+## Running Code
 
 Run `npm run dev` to run the frontend React dev server.
 
 Run `npm run start` to call RScript and start the Plumber/Shiny server.
+
+    ## R version:
 
     ##                _                           
     ## platform       x86_64-pc-linux-gnu         
