@@ -429,6 +429,14 @@ while (!no_error) tryCatch(
                     handleFileRequests(req, res)
 
                   }, serializer = plumber::serializer_html()) %>%
+                  plumber::pr_handle(c("GET", "POST"), "/www/<file>.js", function (path1, file, req, res) {
+
+                     handleFileRequests(req, res)
+
+                  }, serializer = plumber::serializer_text(
+                       serialize_fn = as.character,
+                       type = "application/javascript"
+                  ))  %>%
                   plumber::pr_handle(c("GET", "POST"), "/www/<file>.svg", function (file, req, res) {
 
                     handleFileRequests(req, res)

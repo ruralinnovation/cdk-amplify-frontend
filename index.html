@@ -45,7 +45,22 @@
     </script>
   </head>
   <body>
-    <div id="react-app"></div>
+
+    <nav  id="cori-header" style="margin-bottom: 48px;" title="Frontend"></nav>
+
+    <div id="react-app" style="transition: opacity ease-in 1500ms; opacity: 0.0"></div>
+
+    <div id="sidebar">
+      <div id="about" class="modal-content">
+        <p style="max-width: 75vh; margin-left: auto; margin-right: auto">
+          {{ about_doc }}
+        </p>
+      </div>
+
+      <br />
+
+    </div>
+    <script src="bundle.js"></script>
 
     <script src="/src/main.jsx" type="module"></script>
   </body>

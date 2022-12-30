@@ -28,6 +28,8 @@ const root_init = (evt) => {
             <App content={ () => root_content } />
         </React.StrictMode>
     )
+
+    root_container.style.opacity = "1.0";
 };
 
 if (typeof Shiny === 'object') {
