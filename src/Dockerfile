@@ -11,7 +11,12 @@
 #    libprotobuf-dev libv8-dev protobuf-compiler libudunits2-dev procps libsodium-dev && \
 #    update-ca-certificates -f -v
 #
-#RUN Rscript -e 'local({ r <- getOption("repos"); r["CRAN"] <- "http://cran.r-project.org"; options(repos=r); }); install.packages(c("R6", "cli", "devtools", "future", "hrbrthemes", "httr", "httpuv", "leaflet", "packrat", "plumber", "remoter", "remotes", "renv", "sf", "shiny", "stringr", "tidyverse", "tools", "uuid", "websocket", "withr"));'
+#RUN Rscript -e '\
+#    local({ r <- getOption("repos"); r["CRAN"] <- "http://cran.r-project.org"; options(repos=r); }); \
+#    install.packages(c( \
+#      "R6", "cli", "devtools", "future", "hrbrthemes", "httr", "httpuv", "leaflet", "packrat", "plumber", \
+#      "remoter", "remotes", "renv", "sf", "shiny", "stringr", "tidyverse", "tools", "uuid", "websocket", "withr" \
+#    ));'
 #
 #WORKDIR /srv/shiny-server
 #
@@ -33,7 +38,7 @@
 ##CMD /usr/bin/bash
 ##CMD /usr/bin/shiny-server
 ##CMD /srv/shiny-server/.exec-shiny-app.R
-#
+
 
 FROM docker.io/coriverse/shinyapps:amplify-frontend as previous
 FROM docker.io/rocker/shiny-verse:latest as app
@@ -77,7 +82,12 @@ COPY renv.lock renv.lock
 COPY renv/activate.R renv/activate.R
 COPY renv/settings.dcf renv/settings.dcf
 
-COPY .exec-shiny-app.R .exec-shiny-app.R
+COPY .exec-shiny-app.R .exec-shiny-app.R.bak
+## Fix incorrect (windows) line-ending that keep this script from running on linux
+RUN bash -c "sed $'s/\r$//' .exec-shiny-app.R.bak > .exec-shiny-app.R && \
+    chmod +x .exec-shiny-app.R; \
+"
+
 COPY app.R app.R
 COPY modules modules/
 COPY templates templates/
@@ -95,8 +105,6 @@ RUN bash -c "if [[ -e .env.local ]]; \
 #CMD /usr/bin/bash
 #CMD /usr/bin/shiny-server
 CMD /srv/shiny-server/$APP_NAME/.exec-shiny-app.R 5174
-
-ENTRYPOINT [ "Rscript" ]
 
 EXPOSE 3000
 EXPOSE 3838

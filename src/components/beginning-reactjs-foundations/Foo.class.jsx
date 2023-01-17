@@ -17,7 +17,7 @@ class FooWithoutBind extends React.Component {
             </button>
         )
     }
-};
+}
 
 export { FooWithoutBind };
 

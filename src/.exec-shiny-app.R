@@ -360,7 +360,7 @@ while (!no_error) tryCatch(
                 ws_client$onMessage(function(binary, message) {
                   if ("ws_shiny" %in% names(ws_client$request)) {
                     print("Relay websocket message to Shiny server...")
-                    Sys.sleep(1)
+                    Sys.sleep(0.0125)
                     ws_client$request$ws_shiny$send(as.character(message))
                     print(message)
                   }

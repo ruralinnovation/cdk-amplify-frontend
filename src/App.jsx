@@ -1,3 +1,5 @@
+// noinspection SpellCheckingInspection
+
 import {Component, useEffect, useState} from 'react';
 import reactLogo from './assets/react.svg';
 
@@ -47,7 +49,6 @@ class Header extends Component {
 }
 
 function App ({ content }) {
-    const [count, setCount] = useState(0);
     let content_loaded = false;
     const [state, setState] = useState({
         rawdata: [
@@ -124,7 +125,7 @@ function App ({ content }) {
             .then((data) => {
                 console.log(data.data);
 
-                console.log(`Render to plotly component:
+                console.log("Render to plotly component: ", `
 <Plot
     data={"${state.rawdata}"}
     layout={{
@@ -144,7 +145,7 @@ function App ({ content }) {
     }}
 />
 `
-                )
+                );
 
                 setState({
                     rawdata: [
@@ -169,6 +170,13 @@ function App ({ content }) {
             setHeight(window.innerHeight);
             console.log("Update height/width ratio to: " + window.innerHeight/window.innerWidth);
             setRatio(window.innerHeight/window.innerWidth);
+            setTimeout(() => {
+                console.log({
+                    windowWidth,
+                    windowHeight,
+                    windowRatio
+                })
+            })
         }
     }
 
@@ -219,12 +227,6 @@ function App ({ content }) {
                 </label>
 
             </div><br />
-
-            {/*<div className="card">*/}
-            {/*    <button onClick={() => setCount((count) => count + 1)}>*/}
-            {/*        count is {count}*/}
-            {/*    </button>*/}
-            {/*</div>*/}
 
             {/*<AbstractingContainersAndItems />*/}
 

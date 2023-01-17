@@ -2,8 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/vite.svg" rel="icon" type="image/svg+xml" />
     <title>Vite + React</title>
 
     <!-- Resources provided by Shiny server: -->
@@ -12,6 +12,10 @@
       -->
     {{ headContent() }}
 
+    <link href="src/bundle.css" rel="stylesheet" type="text/css" />
+
+    <script src="src/bundle.js" type="module"></script>
+
     <script>
         const isBrowser = () => typeof window !== 'undefined';
         const isGlobal = () => typeof global !== 'undefined';
@@ -19,7 +23,6 @@
             var global = window;
             var root = window;
         }
-
 
         if (typeof Shiny === 'object') {
           console.log("ShinyJS is loaded");
@@ -60,8 +63,8 @@
       <br />
 
     </div>
-    <script src="bundle.js"></script>
 
-    <script src="/src/main.jsx" type="module"></script>
+    <script src="src/main.jsx" type="module"></script>
+
   </body>
 </html>
