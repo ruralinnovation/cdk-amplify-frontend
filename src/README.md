@@ -31,28 +31,56 @@ running `install.packages('renv')`).
 of the frontend to the `dist` folder, those files will also be copied
 into the `src/www` folder, which is where `R` sources the frontend files
 for both the Shiny server and the Dockerfile build process. So, if you
-have set special values in `.env.development.local` they will get copied
-into the static frontend build, and subsequently into the Docker build,
-so… beware of this.*
+have set special values in `.env*` or `.env.development*` they will get
+copied into the static frontend build files and subsequently into the
+Docker build, depending on whether you ran `npm run build` or
+`npm run build:dev`, respectively, so… beware of this.*
+
+Finally, you may wish to track the version control of the `src`
+directory (core business logic) separately from the project’s root
+directory which contains mostly frontend configuration and
+infrastructure management files. This is in the eventual case that this
+application may be deployed on different platforms (AWS Amplify is one
+among many competing app infrastructure platforms, i.e. Google
+Firebase). In some cases the `src` directory and matching repository
+could itself be deployed directly to [ShinyApps.io](ShinyApps.io). Then,
+if only wanted to work on the `R` portion of the application (i.e. the
+Plumber API or Shiny server logic), you would only clone/open the `src`
+submodule in R Studio. Take
+[ruralinnovation/amplify-app](https://github.com/ruralinnovation/amplify-app)
+and [ruralinnovation/app](https://github.com/ruralinnovation/app) for
+example: the
+[amplify-app](https://github.com/ruralinnovation/amplify-app) repo is
+the frontend configuration/management code and that project’s `src`
+directory is a reference to the
+[app](https://github.com/ruralinnovation/app) repo, which contains the
+business logic and interface code, and can itself be opened in R Studio
+and run as a local application server (or be deployed to another cloud
+platform).
 
 ## Running Code
 
 Run `npm run dev` to run the frontend React dev server.
 
-      
+
         VITE v3.0.5  ready in 3189 ms
 
       ➜  Local:   http://localhost:5173/
       ➜  Network: use --host to expose
-      
 
 Run `npm run start` to call RScript and start the Plumber/Shiny server.
 
-      
+
       [1] "Launching Shiny app (http://127.0.0.1:13743) in future worker cluster..."
       Running plumber API at http://0.0.0.0:5174
       Running swagger Docs at http://127.0.0.1:5174/__docs__/
-      
+
+Run `npm run dev:linux` or `npm run dev:windows` to start both the
+development frontend and the development backend (as a native `R`
+process on Linux or as docker container on Windows) simultaneously. This
+will have the effect of writing files with development environment vars
+to the `dist` folder, so be sure to replace those files with production
+versions by running `npm run build` before committing.
 
 *NOTE*: *This readme was generated from `README.Rmd` by R*:
 

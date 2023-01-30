@@ -339,9 +339,9 @@ while (!no_error) tryCatch(
             ws_client$request$ws_shiny <- websocket::WebSocket$new(paste0("ws://127.0.0.1", ":", shiny_port, "/"))
             ws_client$request$ws_shiny$connect()
             ws_client$request$ws_shiny$onMessage(function(event) {
-              print("Relay Shiny server event message to websocket client...")
-              ws_client$send(event$data)
+              # print("Relay Shiny server event message to websocket client...")
               print(event)
+              ws_client$send(event$data)
             })
           }
           return(ws_clients)
@@ -357,12 +357,12 @@ while (!no_error) tryCatch(
                 addWebSocketClient(ws_client)
                 print("New user connected!")
 
-                ws_client$onMessage(function(binary, message) {
+                ws_client$onMessage(function(binary, event) {
                   if ("ws_shiny" %in% names(ws_client$request)) {
-                    print("Relay websocket message to Shiny server...")
+                    # print("Relay websocket message to Shiny server...")
+                    # print(event)
                     Sys.sleep(0.0125)
-                    ws_client$request$ws_shiny$send(as.character(message))
-                    print(message)
+                    ws_client$request$ws_shiny$send(as.character(event))
                   }
                 })
 
@@ -380,9 +380,23 @@ while (!no_error) tryCatch(
 
           # httr_target <- httr::GET(paste0("http://", req$REMOTE_ADDR, ":", shiny_port, file_path))
           httr_target <- httr::GET(paste0("http://127.0.0.1:", shiny_port, file_path))
-          # httr_result <- httr::content(httr_target, as = "raw")
-          httr_result <- httr::content(httr_target, as = "text", encoding ="UTF-8")
-          # print(httr_result)
+
+          # print(names(req$HEADERS))
+          print(req$HEADERS["accept"])
+
+          if (
+            grepl("gif", req$HEADERS["accept"]) ||
+            grepl("jpeg", req$HEADERS["accept"]) ||
+            grepl("png", req$HEADERS["accept"]) ||
+            grepl("woff", req$HEADERS["accept"])
+          ) {
+            httr_result <- httr::content(httr_target, as = "raw")
+            print("requesting binary file")
+            print(as.character(httr_result))
+          } else {
+            httr_result <- httr::content(httr_target, as = "text", encoding ="UTF-8")
+            # print(httr_result)
+          }
 
           httr_result
         }
@@ -458,6 +472,30 @@ while (!no_error) tryCatch(
                       serialize_fn = as.character,
                       type = "text/css"
                   )) %>%
+                  plumber::pr_handle(c("GET", "POST"), "/www/<path1>/<file>.gif", function (path1, file, req, res) {
+
+                    handleFileRequests(req, res)
+
+                  }, serializer = plumber::serializer_png(
+                      serialize_fn = as.raw,
+                      type = "image/gif"
+                  )) %>%
+                  plumber::pr_handle(c("GET", "POST"), "/www/<path1>/<file>.jpeg", function (path1, file, req, res) {
+
+                    handleFileRequests(req, res)
+
+                  }, serializer = plumber::serializer_jpeg(
+                      serialize_fn = as.raw,
+                      type = "image/jpeg"
+                  )) %>%
+                  plumber::pr_handle(c("GET", "POST"), "/www/<path1>/<file>.jpg", function (path1, file, req, res) {
+
+                    handleFileRequests(req, res)
+
+                  }, serializer = plumber::serializer_jpeg(
+                      serialize_fn = as.raw,
+                      type = "image/jpeg"
+                  )) %>%
                   plumber::pr_handle(c("GET", "POST"), "/www/<path1>/<file>.js", function (path1, file, req, res) {
 
                     handleFileRequests(req, res)
@@ -466,6 +504,22 @@ while (!no_error) tryCatch(
                       serialize_fn = as.character,
                       type = "application/javascript"
                   )) %>%
+                  plumber::pr_handle(c("GET", "POST"), "/www/<path1>/<file>.pdf", function (path1, file, req, res) {
+
+                    handleFileRequests(req, res)
+
+                  }, serializer = plumber::serializer_pdf(
+                      serialize_fn = as.raw,
+                      type = "application/pdf"
+                  )) %>%
+                  plumber::pr_handle(c("GET", "POST"), "/www/<path1>/<file>.png", function (path1, file, req, res) {
+
+                    handleFileRequests(req, res)
+
+                  }, serializer = plumber::serializer_png(
+                      serialize_fn = as.raw,
+                      type = "image/png"
+                  )) %>%
                   plumber::pr_handle(c("GET", "POST"), "/www/<path1>/<file>.svg", function (path1, file, req, res) {
 
                     handleFileRequests(req, res)
@@ -473,6 +527,14 @@ while (!no_error) tryCatch(
                   }, serializer = plumber::serializer_text(
                       serialize_fn = as.character,
                       type = "image/svg+xml"
+                  )) %>%
+                  plumber::pr_handle(c("GET", "POST"), "/www/<path1>/<file>.woff2", function (path1, file, req, res) {
+
+                    handleFileRequests(req, res)
+
+                  }, serializer = plumber::serializer_octet(
+                      serialize_fn = as.raw,
+                      type = "application/font-woff2"
                   )) %>%
                   plumber::pr_handle(c("GET", "POST"), "/www/<path1>/<file>", function (path1, file, req, res) {
 

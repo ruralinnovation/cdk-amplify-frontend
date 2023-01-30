@@ -1,4 +1,4 @@
-#FROM docker.io/rocker/shiny-verse:latest as base
+#FROM public.ecr.aws/l2v0f2h3/rocker/shiny-verse as base
 #
 #ARG gh_token
 #ENV GITHUB_TOKEN=$gh_token
@@ -11,16 +11,11 @@
 #    libprotobuf-dev libv8-dev protobuf-compiler libudunits2-dev procps libsodium-dev && \
 #    update-ca-certificates -f -v
 #
-#RUN Rscript -e '\
-#    local({ r <- getOption("repos"); r["CRAN"] <- "http://cran.r-project.org"; options(repos=r); }); \
-#    install.packages(c( \
-#      "R6", "cli", "devtools", "future", "hrbrthemes", "httr", "httpuv", "leaflet", "packrat", "plumber", \
-#      "remoter", "remotes", "renv", "sf", "shiny", "stringr", "tidyverse", "tools", "uuid", "websocket", "withr" \
-#    ));'
+#RUN Rscript -e 'local({ r <- getOption("repos"); r["CRAN"] <- "http://cran.r-project.org"; options(repos=r); }); install.packages(c("R6", "cli", "devtools", "future", "hrbrthemes", "httr", "httpuv", "leaflet", "packrat", "plumber", "remoter", "remotes", "renv", "sf", "shiny", "stringr", "tidyverse", "tools", "uuid", "websocket", "withr"));'
+#
+##FROM 312512371189.dkr.ecr.us-east-1.amazonaws.com/coriverse/shinyapps:latest
 #
 #WORKDIR /srv/shiny-server
-#
-#COPY .exec-shiny-app.R .exec-shiny-app.R
 #
 #COPY renv.lock renv.lock
 #
@@ -31,17 +26,26 @@
 #    renv::restore(clean = FALSE); \
 #'
 #
+#COPY .exec-shiny-app.R .exec-shiny-app.R
+### Fix incorrect (windows) line-ending that keep this script from running on linux
+#RUN bash -c "cp .exec-shiny-app.R .exec-shiny-app.R.bak && \
+#    sed $'s/\r$//' .exec-shiny-app.R.bak > .exec-shiny-app.R && \
+#    chmod +x .exec-shiny-app.R; \
+#"
+#
 #RUN mkdir -p /srv/shiny-server/data
 #RUN chmod -R ga+rw /srv/shiny-server/*
 #RUN chmod +x /srv/shiny-server/.exec-shiny-app.R
 #
 ##CMD /usr/bin/bash
 ##CMD /usr/bin/shiny-server
-##CMD /srv/shiny-server/.exec-shiny-app.R
+#CMD /srv/shiny-server/.exec-shiny-app.R
 
 
 FROM docker.io/coriverse/shinyapps:amplify-frontend as previous
 FROM docker.io/rocker/shiny-verse:latest as app
+#FROM 312512371189.dkr.ecr.us-east-1.amazonaws.com/coriverse/shinyapps:amplify-frontend as previous
+#FROM public.ecr.aws/l2v0f2h3/rocker/shiny-verse:latest as app
 
 ENV APP_NAME=frontend
 
@@ -104,7 +108,10 @@ RUN bash -c "if [[ -e .env.local ]]; \
 "
 #CMD /usr/bin/bash
 #CMD /usr/bin/shiny-server
-CMD /srv/shiny-server/$APP_NAME/.exec-shiny-app.R 5174
+CMD /srv/shiny-server/$APP_NAME/.exec-shiny-app.R
+
+#ENTRYPOINT [ "/usr/local/bin/Rscript" ]
 
 EXPOSE 3000
 EXPOSE 3838
+EXPOSE 5174

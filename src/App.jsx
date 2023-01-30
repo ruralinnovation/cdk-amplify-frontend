@@ -226,13 +226,13 @@ function App ({ content }) {
                     Number of bins
                 </label>
 
-            </div><br />
+            </div><br /><br /><br />
 
-            {/*<AbstractingContainersAndItems />*/}
+            <AbstractingContainersAndItems />
 
-            {/*<FillingSpace />*/}
+            <FillingSpace />
 
-            {/*<UnderstandingBreakpoints />*/}
+            <UnderstandingBreakpoints />
 
         </div>
     )
