@@ -6,6 +6,7 @@ build/
 dist/
 lib/
 logs/
+modules/fullstack-graphql-book
 node_modules/
 packrat/library/
 renv/library/

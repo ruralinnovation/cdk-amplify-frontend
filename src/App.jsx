@@ -1,26 +1,55 @@
 // noinspection SpellCheckingInspection
 
-import {Component, useEffect, useState} from 'react';
+import { Component, useEffect, useState } from 'react';
 import reactLogo from './assets/react.svg';
 
-import axios from 'axios';
-import { debounce } from 'lodash';
-import Plot from 'react-plotly.js';
-import Slider from 'rc-slider';
-import 'rc-slider/assets/index.css';
-
 import './App.css';
-import AbstractingContainersAndItems from "./components/material-ui/AbstractingContainersAndItems";
-import FillingSpace from "./components/material-ui/FillingSpace";
-import UnderstandingBreakpoints from "./components/material-ui/UnderstandingBreakpoints";
+import AccessibleTable from "./components/AccessibleTable.class";
 
 import MyComponent from './components/beginning-reactjs-foundations/MyComponent.class';
 import Foo from './components/beginning-reactjs-foundations/Foo.class';
 import { FooWithoutBind } from './components/beginning-reactjs-foundations/Foo.class';
+import PlotlyPlumberHistogramEx from './components/PlotlyPlumberHistogramEx.class';
 import UserProfileClass from './components/beginning-reactjs-foundations/UserProfile.class';
 import UserProfileCreateReactClass from './components/beginning-reactjs-foundations/UserProfile.create-react-class';
 
+import AbstractingContainersAndItems from "./components/material-ui/AbstractingContainersAndItems";
+import FillingSpace from "./components/material-ui/FillingSpace";
+import UnderstandingBreakpoints from "./components/material-ui/UnderstandingBreakpoints";
+
 // import aws_config from "./aws-config";
+
+function createData(
+    name,
+    calories,
+    fat,
+    carbs,
+    protein,
+) {
+    return { name, calories, fat, carbs, protein };
+}
+
+const table_columns = [
+    "name",
+    "calories",
+    "fat",
+    "carbs",
+    "protein"
+];
+
+const table_labels = {
+    "name": "Dessert (100g serving)",
+    "calories": "Calories",
+    "fat": "Fat (g)",
+    "carbs": "Carbs (g)",
+    "protein": "Protein (g)"
+};
+
+const table_rows = [
+    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+    createData('Eclair', 262, 16.0, 24, 6.0),
+];
 
 class Header extends Component {
     render() {
@@ -49,16 +78,8 @@ class Header extends Component {
 }
 
 function App ({ content }) {
+
     let content_loaded = false;
-    const [state, setState] = useState({
-        rawdata: [
-            {
-                y: null,
-                x: null,
-                type: 'bar'
-            }
-        ]
-    });
 
     const [windowWidth, setWidth]   = useState(0);
     const [windowHeight, setHeight] = useState(0);
@@ -70,14 +91,16 @@ function App ({ content }) {
         // console.log(aws_config);
 
         // Check component class names
-        console.log("Custom components: ");
+        console.log("Custom components...");
 
         // React components have class names...
         console.log("App is: ", App.name);
+        console.log("AccessibleTable is: ", AccessibleTable.name);
         console.log("Header is: ", Header.name);
         console.log("MyComponent is: ", MyComponent.name);
         console.log("Foo is: ", Foo.name);
         console.log("FooWithoutBind is: ", FooWithoutBind.name);
+        console.log("PlotlyPlumberHistogramEx is: ", PlotlyPlumberHistogramEx.name);
         console.log("UserProfileClass is: ", UserProfileClass.name);
 
         // React components created by createClass() do not have class names...
@@ -97,12 +120,12 @@ function App ({ content }) {
             const app_content = (typeof content === 'function') ?
                 content() :
                 { childNodes: [] };
-            console.log(app_first_child);
-            console.log(app_content.childNodes);
+            // console.log(app_first_child);
+            // console.log(app_content.childNodes);
             setTimeout((container) => {
                 // container.append(app_content.childNodes);
                 app_content.childNodes.forEach(c => {
-                    console.log(c);
+                    // console.log(c);
                     container.insertBefore(c, app_first_child)
                 });
             }, 53, app_container);
@@ -112,54 +135,7 @@ function App ({ content }) {
 
     useEffect( addContentToCurrentComponent , []);
 
-    async function onSliderChange(input) {
-        console.log("what?");
-
-        return axios.get(`${import.meta.env.VITE_API_BACKEND}/__api__/hist-raw`,
-            {
-                params: {
-                    bins: input,
-                }
-            }
-        )
-            .then((data) => {
-                console.log(data.data);
-
-                console.log("Render to plotly component: ", `
-<Plot
-    data={"${state.rawdata}"}
-    layout={{
-        title: 'Histogram of waiting times',
-        bargap: 0.01,
-        autosize: false,
-        width: (0.364583 * ${windowWidth}),
-        height: (0.234375 * ${windowWidth}),
-        xaxis: {
-            title: 'Waiting time to next eruption (in mins)'
-        },
-        yaxis: {
-            title: 'Frequency'
-        },
-        useResizeHandler: true,
-        responsive: true
-    }}
-/>
-`
-                );
-
-                setState({
-                    rawdata: [
-                        {
-                            y: data.data.map(x => x["counts"]),
-                            x: data.data.map(x => x["mids"]),
-                            type: 'bar'
-                        }
-                    ]
-                })
-            });
-    }
-
-    function updateDimensions () {
+    function updateWindowDimensions () {
         if (!!window &&
             window.hasOwnProperty("innerWidth") &&
             window.hasOwnProperty("innerHeight")
@@ -181,61 +157,31 @@ function App ({ content }) {
     }
 
     useEffect(() => {
-        window.addEventListener("load", updateDimensions);
-        window.addEventListener("resize", updateDimensions);
-        return () => window.removeEventListener("resize", updateDimensions);
+        window.addEventListener("load", updateWindowDimensions);
+        window.addEventListener("resize", updateWindowDimensions);
+        return () => window.removeEventListener("resize", updateWindowDimensions);
     }, []);
 
     return (
         <div className="App">
-            <Header />
+            {/*<Header />*/}
 
-            <div className="card">
-                <Plot
-                    data={state.rawdata}
-                    layout={{
-                        title: 'Histogram of waiting times',
-                        bargap: 0.01,
-                        autosize: false,
-                        width: (0.364583 * windowWidth), // + "px",
-                        height: (0.234375 * windowWidth), // + "px", // (yes, width)
-                        xaxis: {
-                            title: 'Waiting time to next eruption (in mins)'
-                        },
-                        yaxis: {
-                            title: 'Frequency'
-                        },
-                        useResizeHandler: true,
-                        responsive: true
-                    }}
-                />
-                <Slider
-                    id={"bins"}
-                    onChange={debounce(onSliderChange, 60)}
-                    min={1}
-                    max={50}
-                    marks={{
-                        1: '1',
-                        13: '13',
-                        26: '26',
-                        38: '38',
-                        50: '50'
-                    }} toolTipVisibleAlways={true} />
-                <br />
-                <label htmlFor="bins" className="col-form-label">
-                    Number of bins
-                </label>
+            {/*<FooWithoutBind />*/}
 
-            </div><br /><br /><br />
+            {/*<Foo />*/}
 
-            <AbstractingContainersAndItems />
+            {/*<AbstractingContainersAndItems />*/}
 
-            <FillingSpace />
+            {/*<FillingSpace />*/}
 
-            <UnderstandingBreakpoints />
+            {/*<UnderstandingBreakpoints />*/}
+
+            <AccessibleTable columns={table_columns} labels={table_labels} rows={table_rows} />
+
+            <PlotlyPlumberHistogramEx windowWidth={windowWidth} />
 
         </div>
     )
 }
 
-export default App
+export default App;

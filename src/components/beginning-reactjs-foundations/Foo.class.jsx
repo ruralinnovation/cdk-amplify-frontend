@@ -13,7 +13,7 @@ class FooWithoutBind extends React.Component {
     render () {
         return (
             <button type={"button"} onClick={this.handleClick}>
-                Click Me
+                Click Me (Throws Exception)
             </button>
         )
     }
@@ -28,14 +28,14 @@ class Foo extends FooWithoutBind {
         this.handleClick = this.handleClick.bind(this);
     }
 
-    handleClick(event) {
-        console.log(this.message); // 'hello'
-    }
+    // handleClick(event) {
+    //     console.log(this.message); // 'hello'
+    // }
 
     render () {
         return (
             <button type={"button"} onClick={this.handleClick}>
-                Click Me
+                Click Me (Works)
             </button>
         )
     }

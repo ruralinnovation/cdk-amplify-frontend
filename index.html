@@ -6,15 +6,19 @@
     <link href="/vite.svg" rel="icon" type="image/svg+xml" />
     <title>Vite + React</title>
 
+    <!--[if lte IE 8]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+
+    <link href="src/bundle.css"  rel="stylesheet" type="text/css" />
+
     <!-- Resources provided by Shiny server: -->
     <!-- headContent() gets defined when UI is built from this template,
       -- so it's not directly available as a function exported by shiny
       -->
-    {{ headContent() }}
+    {{ headContent() }}{{ use_tracking() }}
 
-    <link href="src/bundle.css" rel="stylesheet" type="text/css" />
-
-    <script src="src/bundle.js" type="module"></script>
+    <link href="src/styles.css"  rel="stylesheet" type="text/css" />
 
     <script>
         const isBrowser = () => typeof window !== 'undefined';
@@ -64,6 +68,7 @@
 
     </div>
 
+    <script src="src/bundle.js" type="module"></script>
     <script src="src/main.jsx" type="module"></script>
 
   </body>

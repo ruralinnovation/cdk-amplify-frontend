@@ -22,8 +22,8 @@ if (as.numeric(version$major) == 3 && as.numeric(version$minor) >= 5) {
 args <- commandArgs(trailingOnly = TRUE)
 appDir <- getwd()
 local_lib <- .libPaths()[1]
-local_port <- as.numeric("3000")
-shiny_port <- httpuv::randomPort()
+local_port <- 3000L
+shiny_port <- local_port
 
 if (exists("args") && !is.null(args) && !is.na(args[1])) {
   if (!grepl("install", args[1])) {
@@ -221,6 +221,11 @@ while (!no_error) tryCatch(
         }
 
         future::plan(future::cluster, workers = future_cluster)
+        shiny_port <- if (randomPort(min = 1220L, max = 1221L, host = "127.0.0.1", n = 1)) {
+          1221L
+        } else {
+          httpuv::randomPort(host = "127.0.0.1", n = 20)
+        }
 
         options(shiny.host = "0.0.0.0") # listen on all available network interfaces
         options(shiny.port = shiny_port)
@@ -238,7 +243,6 @@ while (!no_error) tryCatch(
         )
 
         if (grepl("/", appDir)) {
-
           print(paste0("Launching Shiny app (http://127.0.0.1:", shiny_port, ") in future worker cluster..."))
 
           # shiny::runApp(appDir, launch.browser = FALSE)
@@ -385,10 +389,10 @@ while (!no_error) tryCatch(
           print(req$HEADERS["accept"])
 
           if (
-            grepl("gif", req$HEADERS["accept"]) ||
-            grepl("jpeg", req$HEADERS["accept"]) ||
-            grepl("png", req$HEADERS["accept"]) ||
-            grepl("woff", req$HEADERS["accept"])
+              grepl("gif", req$HEADERS["accept"]) ||
+                  grepl("jpeg", req$HEADERS["accept"]) ||
+                  grepl("png", req$HEADERS["accept"]) ||
+                  grepl("woff", req$HEADERS["accept"])
           ) {
             httr_result <- httr::content(httr_target, as = "raw")
             print("requesting binary file")
@@ -443,13 +447,21 @@ while (!no_error) tryCatch(
                     handleFileRequests(req, res)
 
                   }, serializer = plumber::serializer_html()) %>%
-                  plumber::pr_handle(c("GET", "POST"), "/www/<file>.js", function (path1, file, req, res) {
+                  plumber::pr_handle(c("GET", "POST"), "/www/<file>.css", function (path1, file, req, res) {
 
-                     handleFileRequests(req, res)
+                    handleFileRequests(req, res)
 
                   }, serializer = plumber::serializer_text(
-                       serialize_fn = as.character,
-                       type = "application/javascript"
+                      serialize_fn = as.character,
+                      type = "text/css"
+                  )) %>%
+                  plumber::pr_handle(c("GET", "POST"), "/www/<file>.js", function (path1, file, req, res) {
+
+                    handleFileRequests(req, res)
+
+                  }, serializer = plumber::serializer_text(
+                      serialize_fn = as.character,
+                      type = "application/javascript"
                   ))  %>%
                   plumber::pr_handle(c("GET", "POST"), "/www/<file>.svg", function (file, req, res) {
 
@@ -459,6 +471,14 @@ while (!no_error) tryCatch(
                       serialize_fn = as.character,
                       type = "image/svg+xml"
                   )) %>%
+                  plumber::pr_handle(c("GET", "POST"), "/www/<file>.woff2", function (path1, file, req, res) {
+
+                    handleFileRequests(req, res)
+
+                  }, serializer = plumber::serializer_octet(
+                      serialize_fn = as.raw,
+                      type = "application/font-woff2"
+                  ))  %>%
                   plumber::pr_handle(c("GET", "POST"), "/www/<file>", function (file, req, res) {
 
                     handleFileRequests(req, res)

@@ -20,7 +20,7 @@ This is a base template for creating React-oriented frontend applications with a
 
 Assuming that you are using [cdk-amplify-frontend](https://github.com/ruralinnovation/cdk-amplify-frontend) as a template (via the "Use this template" button in Github) for a new application, clone the resulting repo to your local environment. The first file you should update is `package.json`. Change the value of the "name" property to reflect your project name and then run `npm install` to install dependencies.
 
-For local development, copy the `.env` file to a file called `.env.development.local`. Update the value for the environment variables in `.env.development.local` as needed (for instance, change `VITE_API_BACKEND=https://frontend.ruralopportunitymap.us` to `VITE_API_BACKEND=http://127.0.0.1:5174` in order for the local development frontend to connect to the local backend server).
+For local development, copy the `.env` file to a file called `.env.development.local`. Update the value for the environment variables in `.env.development.local` as needed (for instance, change `VITE_AMP_BACKEND_API=https://frontend.ruralopportunitymap.us` to `VITE_AMP_BACKEND_API=http://127.0.0.1:5174` in order for the local development frontend to connect to the local backend server).
 
 If you plan on developing/deploying an `R` backend that utilizes Plumber and/or Shiny, in the `R` console run `renv::restore(project = "src")` (you may have to install the `renv` package in `R` before doing this, by running `install.packages('renv')`).
 

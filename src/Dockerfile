@@ -42,15 +42,17 @@
 #CMD /srv/shiny-server/.exec-shiny-app.R
 
 
-FROM docker.io/coriverse/shinyapps:amplify-frontend as previous
-FROM docker.io/rocker/shiny-verse:latest as app
-#FROM 312512371189.dkr.ecr.us-east-1.amazonaws.com/coriverse/shinyapps:amplify-frontend as previous
-#FROM public.ecr.aws/l2v0f2h3/rocker/shiny-verse:latest as app
+FROM 312512371189.dkr.ecr.us-east-1.amazonaws.com/coriverse/shinyapps:amplify-frontend as previous
+#FROM docker.io/coriverse/shinyapps:amplify-frontend as previous
+FROM public.ecr.aws/l2v0f2h3/rocker/shiny-verse:latest as app
 
 ENV APP_NAME=frontend
 
 ARG gh_token
 ENV GITHUB_PAT=$gh_token
+
+RUN apt update -y && \
+    apt install -y ca-certificates libgdal-dev libharfbuzz-dev libfribidi-dev libv8-dev libjq-dev
 
 #COPY --from=base /root/.cache/  /root/.cache/
 COPY --from=previous /root/.cache/  /root/.cache/
@@ -72,12 +74,12 @@ WORKDIR /srv/shiny-server/$APP_NAME
 #COPY --from=previous /srv/shiny-server/$APP_NAME /srv/shiny-server/$APP_NAME
 #COPY --from=previous /srv/shiny-server/$APP_NAME/app.R /srv/shiny-server/$APP_NAME/app.R
 #COPY --from=previous /srv/shiny-server/$APP_NAME/data /srv/shiny-server/$APP_NAME/data/
-#COPY --from=previous /srv/shiny-server/$APP_NAME/modules /srv/shiny-server/$APP_NAME/modules/
+COPY --from=previous /srv/shiny-server/$APP_NAME/modules /srv/shiny-server/$APP_NAME/modules/
 COPY --from=previous /srv/shiny-server/$APP_NAME/renv /srv/shiny-server/$APP_NAME/renv/
 COPY --from=previous /srv/shiny-server/$APP_NAME/templates /srv/shiny-server/$APP_NAME/templates/
 COPY --from=previous /srv/shiny-server/$APP_NAME/www /srv/shiny-server/$APP_NAME/www/
 
-RUN echo $(ls -lA)
+RUN echo $(ls -A)
 
 COPY data ./data/
 
@@ -92,7 +94,12 @@ RUN bash -c "sed $'s/\r$//' .exec-shiny-app.R.bak > .exec-shiny-app.R && \
     chmod +x .exec-shiny-app.R; \
 "
 
+## Install dependency updates
+# RUN Rscript -e 'install.packages("devtools"); devtools::install_version("rlang", version = "1.1.0")'
+RUN bash -c "/srv/shiny-server/$APP_NAME/.exec-shiny-app.R install ."
+
 COPY app.R app.R
+COPY data data/
 COPY modules modules/
 COPY templates templates/
 COPY www www/
@@ -101,7 +108,7 @@ COPY README.md README.md
 RUN chmod -R ga+rw /srv/shiny-server/$APP_NAME
 RUN chmod +x /srv/shiny-server/$APP_NAME/.exec-shiny-app.R
 
-# Remove the local environment vars from this build
+## Remove the local environment vars from this build
 RUN bash -c "if [[ -e .env.local ]]; \
     then mv .env.local .env.local.bak; \
     fi \

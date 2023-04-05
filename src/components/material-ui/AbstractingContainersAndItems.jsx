@@ -1,8 +1,8 @@
 import React from 'react';
-import { withStyles } from "@material-ui/core/styles";
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import Chip from '@material-ui/core/Chip';
+import { withStyles } from "@mui/styles";
+import { Paper } from "@mui/material";
+import { Grid } from "@mui/material";
+import { Chip } from "@mui/material";
 
 const styles = theme => ({
     root: {

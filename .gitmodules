@@ -1,0 +1,3 @@
+[submodule "src/modules/fullstack-graphql-book"]
+	path = src/modules/fullstack-graphql-book
+	url = https://github.com/dancingfrog/fullstack-graphql-book.git
