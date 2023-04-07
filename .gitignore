@@ -1,6 +1,7 @@
 *.bak
 *.env*
 *.idea
+fullstack-graphql-book
 
 .R*
 *.Rproj*

@@ -35,7 +35,9 @@ export default defineConfig({
         //     ]
         // }),
 
-        react(),
+        react({
+            jsxRuntime: 'classic'
+        }),
 
         // Copy outputs to templates and www dirs
         copy({
