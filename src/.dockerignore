@@ -6,8 +6,8 @@ build/
 dist/
 lib/
 logs/
-modules/fullstack-graphql-book
 node_modules/
+modules/fullstack-graphql-book
 packrat/library/
 renv/library/
 rsconnect/

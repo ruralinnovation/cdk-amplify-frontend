@@ -1,0 +1,13 @@
+{
+  "environment": "dev",
+  "region": "us-east-1",
+  "apiUrl": "https://d6q5pgqgx5oy5.cloudfront.net",
+  "cognito": {
+    "clientId": "5eusi16g0o2q1g1rr5ehgudodm",
+    "domain": "authcori.auth.us-east-1.amazoncognito.com",
+    "identityPoolId": "us-east-1:2194a76a-fa3d-4c33-999e-e3c4b2b049ee",
+    "userPoolId": "us-east-1_QeA4600FA"
+  },
+  "buildTime": "2022-05-20T13:23:42.602Z",
+  "version": "1.0.0"
+}

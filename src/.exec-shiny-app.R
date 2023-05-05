@@ -244,10 +244,9 @@ while (!no_error) tryCatch(
 
         if (grepl("/", appDir)) {
           print(paste0("Launching Shiny app (http://127.0.0.1:", shiny_port, ") in future worker cluster..."))
-
           # shiny::runApp(appDir, launch.browser = FALSE)
           shiny_app_future <- future::future({
-            print(paste0("Launching Shiny app (http://127.0.0.1:", shiny_port, ") in future worker cluster..."))
+
             shiny_app <- shiny::runApp(
                 app = if (file.exists(paste0(appDir, "/server.R"))) {
                   print(paste0("With ", appDir, "/server.R: ", file.exists(paste0(appDir, "/server.R"))))
@@ -268,9 +267,9 @@ while (!no_error) tryCatch(
 
         } else {
           print(paste0("Launching Shiny app (http://127.0.0.1:", shiny_port, ") in future worker cluster..."))
-
-          # # shiny::runApp(launch.browser = FALSE)
+          # shiny::runApp(launch.browser = FALSE)
           shiny_app_future <- future::future({
+
             shiny_app <- shiny::runApp(
                 app = if (file.exists("server.R")) {
                   print(paste0("With server.R: ", file.exists("server.R")))
