@@ -7,7 +7,7 @@ class FooWithoutBind extends React.Component {
     }
 
     handleClick () {
-        console.log(this.message); // 'this' is undefined
+       // console.logthis.message); // 'this' is undefined
     }
 
     render () {
@@ -29,7 +29,7 @@ class Foo extends FooWithoutBind {
     }
 
     // handleClick(event) {
-    //     console.log(this.message); // 'hello'
+    //    // console.logthis.message); // 'hello'
     // }
 
     render () {

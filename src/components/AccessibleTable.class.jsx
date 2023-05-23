@@ -23,16 +23,16 @@ class AccessibleTable extends React.Component {
      * @param snapshot
      */
     componentDidUpdate (prevProps, prevState, snapshot) {
-        console.log("AccessibleTable prevProps:", prevProps);
+       // console.log"AccessibleTable prevProps:", prevProps);
 
         if (prevProps !== this.props) {
-            console.log("Props have changed:", this.props);
+           // console.log"Props have changed:", this.props);
             this.columns = this.props.columns;
             this.labels = this.props.labels;
             this.rows = this.props.rows;
             this.forceUpdate(); // <- !
         } else {
-            console.log("Props are the same:", this.props)
+           // console.log"Props are the same:", this.props)
         }
 
     }
@@ -48,8 +48,8 @@ class AccessibleTable extends React.Component {
     }
 
     createCell (row, col, i) {
-        console.log(i.toString() + "-" + col.toString(), ":", this.getValue(row, col));
-        return (col.toString == "name") ?
+       // console.logi.toString() + "-" + col.toString(), ":", this.getValue(row, col));
+        return (col.toString().match(/name/) !== null) ?
             <TableCell key={i.toString() + "-" + col.toString()} component="th" scope="row">{this.getValue(row, col)}</TableCell> :
             <TableCell key={i.toString() + "-" + col.toString()} align="right">{this.getValue(row, col)}</TableCell>
     }
@@ -67,7 +67,7 @@ class AccessibleTable extends React.Component {
                     <TableHead>
                         <TableRow>
                             {this.columns.map((col) =>
-                                (col.toString == "name") ?
+                                (col.toString().match(/name/) !== null) ?
                                 <TableCell key={col.toString()}>{this.getLabel(col)}</TableCell> :
                                 <TableCell align="right" key={col.toString()}>{this.getLabel(col)}</TableCell>
                             )}

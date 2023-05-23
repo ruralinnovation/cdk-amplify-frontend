@@ -1,11 +1,35 @@
 import React from 'react';
 // import { createRoot } from 'react-dom/client';
 import { render } from "react-dom";
-import './index.css';
 import App from './App';
-
-import ApolloGraphQLProvider from "./modules/fullstack-graphql-book/src/components/ApolloGraphQLProvider";
-
+import './index.css';
+// import {
+//     ApolloClient,
+//     ApolloProvider,
+//     InMemoryCache
+// } from "@apollo/client";
+//
+// import { setMarkedBusinesses } from "./modules/fullstack-graphql-book/src/components/markedBusinesses";
+//
+// const
+//     client = new ApolloClient(
+//     {
+//         uri: import.meta.env.VITE_GRAPHQL_LOCAL_API,
+//         cache: new InMemoryCache({
+//             typePolicies: {
+//                 Business: {
+//                     fields: {
+//                         businessMarked: {
+//                             read(_, { readField }) {
+//                                 return setMarkedBusinesses().includes(readField("businessId"));
+//                             },
+//                         },
+//                     },
+//                 },
+//             },
+//         }),
+//         // link: new HttpLink({ uri: `${import.meta.env.VITE_GRAPHQL_LOCAL_API}/', fetch })
+//     }),
 const
     root_id = 'react-app',
     root_container = document.getElementById(root_id),
@@ -28,17 +52,14 @@ const
         // const root = createRoot(root_container);
         // root.render(
         //     <React.StrictMode>
-        //         <ApolloGraphQLProvider>
-        //             <App content={ () => root_content } />
-        //         </ApolloGraphQLProvider>
+        //         <App content={ () => root_content } />
         //     </React.StrictMode>
         // );
-
         render(
             <React.StrictMode>
-                <ApolloGraphQLProvider>
-                    <App content={ () => root_content } />
-                </ApolloGraphQLProvider>
+                {/*<ApolloProvider client={client}>*/}
+                    <App content={() => root_content} />
+                {/*</ApolloProvider>*/}
             </React.StrictMode>,
             root_container
         );

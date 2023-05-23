@@ -19,6 +19,12 @@ import UnderstandingBreakpoints from "./components/material-ui/UnderstandingBrea
 
 // import aws_config from "./aws-config";
 
+// import BusinessSearch from './modules/fullstack-graphql-book/src/components/BusinessSearch';
+// import {
+//     gql,
+//     useQuery
+// } from "@apollo/client";
+
 function createData(
     name,
     calories,
@@ -177,6 +183,8 @@ function App ({ content }) {
             {/*<UnderstandingBreakpoints />*/}
 
             <AccessibleTable columns={table_columns} labels={table_labels} rows={table_rows} />
+
+            {/*<BusinessSearch />*/}
 
             <PlotlyPlumberHistogramEx windowWidth={windowWidth} />
 

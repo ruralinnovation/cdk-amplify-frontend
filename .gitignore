@@ -64,6 +64,7 @@ dist
 fullstack-graphql-book
 logs
 node_modules
+package-lock.json
 packrat/lib*
 src/renv/lib*
 src/renv/sta*
