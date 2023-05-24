@@ -1,6 +1,6 @@
 import("./pm.mjs").then(PM => {
 
-    const pm = new PM.default("70o6i77h1orcnvonb9ua3fh58e", "nahum@mergingfutures.com", "Temporary54321!");
+    const pm = new PM.default("70o6i77h1orcnvonb9ua3fh58e", process.env.INTEGRATION_TESTING_USERNAME, process.env.INTEGRATION_TESTING_PASSWORD);
 
     console.log(typeof pm);
     console.log(pm);
