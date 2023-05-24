@@ -1,0 +1,70 @@
+{
+  "name": "fullstack-graphql-book",
+  "version": "0.0.1",
+  "author": "John Hall",
+  "description": "https://github.com/dancingfrog/fullstack-graphql-book",
+  "license": "MIT",
+  "main": "index.ts",
+  "ava": {
+    "files": [
+      "test/**/*.test.ts"
+    ],
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
+  },
+  "dependencies": {
+    "@apollo/client": "^3.7.8",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@graphql-tools/schema": "^9.0.16",
+    "@mui/material": "^5.11.11",
+    "@neo4j/graphql": "^3.15.0",
+    "apollo-server": "^3.7.0",
+    "ava": "^5.1.1",
+    "cross-fetch": "^3.1.5",
+    "dotenv": "^16.0.3",
+    "graphql": "^16.6.0",
+    "graphql-type-json": "^0.3.2",
+    "neo4j-driver": "^5.5.0",
+    "node-fetch": "^3.3.0",
+    "pg": "^8.9.0",
+    "pg-hstore": "^2.3.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "sequelize": "^6.28.1",
+    "typescript": "^4.9.5"
+  },
+  "devDependencies": {
+    "@neo4j/introspector": "^1.0.3",
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6",
+    "ava": "^5.1.1",
+    "cross-env": "^7.0.3",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1"
+  },
+  "scripts": {
+    "dev:db:migrate": "npm run tsc src/pg/config/index && sequelize db:migrate '--config' src/pg/config/index.js '--migrations-path' src/pg/migrations",
+    "dev:db:migrate:undo": "npm run tsc src/pg/config/index && sequelize db:migrate:undo '--config' src/pg/config/index.js '--migrations-path' src/pg/migrations",
+    "dev:db:migrate:undo:all": "npm run tsc src/pg/config/index && sequelize db:migrate:undo:all '--config' src/pg/config/index.js '--migrations-path' src/pg/migrations '--to'",
+    "dev:db:seed:all": "npm run tsc src/pg/config/index && sequelize db:seed:all '--config' src/pg/config/index.js '--seeders-path' src/pg/seeders",
+    "dev:migration:create:userId": "sequelize migration:create '--name' add-userId-to-post '--migrations-path' src/pg/migrations",
+    "dev:model:generate:post": "sequelize model:generate '--name' post '--attributes' text:text '--migrations-path' src/pg/migrations '--models-path' src/pg/models",
+    "dev:model:generate:user": "sequelize model:generate '--name' user '--attributes' username:text,avatar:text '--migrations-path' src/pg/migrations '--models-path' src/pg/models",
+    "dev:seed:generate": "npm run tsc src/pg/config/index && sequelize seed:generate '--config' src/pg/config/index.js '--seeders-path' src/pg/seeders '--name'",
+    "start": "npm run start:pg-docker && npm run start:pg-graphql",
+    "start:neo4j-docker": "bash neo4j-local-db.sh",
+    "start:neo4j-graphql": "npm run ts src/neo4j/index.ts",
+    "start:pg-docker": "bash pg-local-db.sh",
+    "start:pg-graphql": "npm run ts src/pg/index.ts",
+    "test": "npm run test:integration",
+    "test:integration": "ava --config integration-tests.config.cjs",
+    "test:unit": "ava",
+    "ts": "npm install cross-env nodemon ts-node && cross-env DEBUG=apollo-server:* nodemon '--watch' src ",
+    "tsc": "npm install cross-env typescript && tsc '--skipLibCheck' "
+  }
+}
