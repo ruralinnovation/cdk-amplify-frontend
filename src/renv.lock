@@ -122,6 +122,11 @@
       "Requirements": [],
       "Hash": "45f0398006e83a5b10b72a90663d8d8c"
     },
+    "RCurl": {
+      "Package": "RCurl",
+      "Version": "1.98-1.6",
+      "Source": "Repository"
+    },
     "RPostgres": {
       "Package": "RPostgres",
       "Version": "1.2.0",
@@ -983,11 +988,8 @@
     },
     "igraph": {
       "Package": "igraph",
-      "Version": "1.4.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "a7ef0d811cb66d8be9da0d7b5ab80ded",
-      "Requirements": []
+      "Version": "1.4.3",
+      "Source": "Repository"
     },
     "influenceR": {
       "Package": "influenceR",

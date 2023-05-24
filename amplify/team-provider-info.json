@@ -1,26 +1,4 @@
 {
-  "dev": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-amplifyfrontend-dev-171109-authRole",
-      "UnauthRoleArn": "arn:aws:iam::312512371189:role/amplify-amplifyfrontend-dev-171109-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::312512371189:role/amplify-amplifyfrontend-dev-171109-authRole",
-      "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-amplifyfrontend-dev-171109-deployment",
-      "UnauthRoleName": "amplify-amplifyfrontend-dev-171109-unauthRole",
-      "StackName": "amplify-amplifyfrontend-dev-171109",
-      "StackId": "arn:aws:cloudformation:us-east-1:312512371189:stack/amplify-amplifyfrontend-dev-171109/58051ff0-f9ae-11ed-bb35-0e266e788609",
-      "AmplifyAppId": "dne8f868omkyd",
-      "NetworkStackS3Url": "https://s3.amazonaws.com/amplify-amplifyfrontend-dev-171109-deployment/amplify-cfn-templates/networkingStackTemplate.json"
-    },
-    "categories": {
-      "hosting": {
-        "ElasticContainer": {
-          "domain": "frontend-dev.ruralopportunitymap.us",
-          "restrictAccess": false
-        }
-      }
-    }
-  },
   "test": {
     "awscloudformation": {
       "AuthRoleName": "amplify-frontend-test-91138-authRole",
@@ -31,6 +9,40 @@
       "UnauthRoleName": "amplify-frontend-test-91138-unauthRole",
       "StackName": "amplify-frontend-test-91138",
       "StackId": "arn:aws:cloudformation:us-east-1:312512371189:stack/amplify-frontend-test-91138/85ad1670-fa34-11ed-9308-0ae169378be5",
+      "AmplifyAppId": "dne8f868omkyd"
+    }
+  },
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-amplifyfrontend-dev-171109-authRole",
+      "UnauthRoleArn": "arn:aws:iam::312512371189:role/amplify-amplifyfrontend-dev-171109-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::312512371189:role/amplify-amplifyfrontend-dev-171109-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-amplifyfrontend-dev-171109-deployment",
+      "UnauthRoleName": "amplify-amplifyfrontend-dev-171109-unauthRole",
+      "StackName": "amplify-amplifyfrontend-dev-171109",
+      "StackId": "arn:aws:cloudformation:us-east-1:312512371189:stack/amplify-amplifyfrontend-dev-171109/43321500-fa40-11ed-8dc0-121502997f6b",
+      "AmplifyAppId": "dne8f868omkyd"
+    },
+    "categories": {
+      "hosting": {
+        "ElasticContainer": {
+          "domain": "frontend-dev.ruralopportunitymap.us",
+          "restrictAccess": false
+        }
+      }
+    }
+  },
+  "main": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-frontend-main-115350-authRole",
+      "UnauthRoleArn": "arn:aws:iam::312512371189:role/amplify-frontend-main-115350-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::312512371189:role/amplify-frontend-main-115350-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-frontend-main-115350-deployment",
+      "UnauthRoleName": "amplify-frontend-main-115350-unauthRole",
+      "StackName": "amplify-frontend-main-115350",
+      "StackId": "arn:aws:cloudformation:us-east-1:312512371189:stack/amplify-frontend-main-115350/2e7dc900-fa4b-11ed-b995-0a478d33b015",
       "AmplifyAppId": "dne8f868omkyd"
     }
   }
