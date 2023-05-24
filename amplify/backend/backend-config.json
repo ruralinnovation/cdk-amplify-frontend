@@ -1,5 +1,38 @@
 {
-  "api": {},
+  "api": {
+    "frontend-api": {
+      "resourceName": "frontend-api",
+      "dependsOn": [
+        {
+          "category": "",
+          "resourceName": "NetworkStack",
+          "attributes": [
+            "ClusterName",
+            "VpcId",
+            "VpcCidrBlock",
+            "SubnetIds",
+            "VpcLinkId",
+            "CloudMapNamespaceId"
+          ]
+        }
+      ],
+      "deploymentMechanism": "INDENPENDENTLY_MANAGED",
+      "imageSource": {
+        "type": "CUSTOM"
+      },
+      "restrictAccess": false,
+      "build": false,
+      "providerPlugin": "awscloudformation",
+      "service": "ElasticContainer",
+      "gitHubInfo": {
+        "path": "https://github.com/ruralinnovation/cdk-amplify-frontend/tree/dev/src",
+        "tokenSecretArn": "arn:aws:secretsmanager:us-east-1:312512371189:secret:amplify-amplifyfrontend-dev-171109-api-frontend-api-github-token-zk9ZMx"
+      },
+      "skipHashing": false,
+      "apiType": "REST",
+      "iamAccessUnavailable": true
+    }
+  },
   "hosting": {
     "ElasticContainer": {
       "resourceName": "site",
