@@ -108,6 +108,10 @@ COPY --from=previous /root/.cache/  /root/.cache/
 #COPY --from=base /srv/shiny-server /srv/shiny-server
 COPY --from=previous /srv/shiny-server/$APP_NAME /srv/shiny-server/$APP_NAME
 
+RUN apt update -y && \
+    apt install -y ca-certificates libgdal-dev libharfbuzz-dev libfribidi-dev libv8-dev libjq-dev nano \
+    libmagick++-dev libprotobuf-dev protobuf-compiler libudunits2-dev procps libsodium-dev  libudunits2-dev
+
 ENV APP_NAME=frontend
 
 ARG gh_token
@@ -131,10 +135,6 @@ COPY renv/settings.dcf renv/settings.dcf
 
 RUN chmod -R ga+rw /srv/shiny-server/$APP_NAME
 
-RUN apt update -y && \
-    apt install -y ca-certificates libgdal-dev libharfbuzz-dev libfribidi-dev libv8-dev libjq-dev nano \
-    libmagick++-dev libprotobuf-dev protobuf-compiler libudunits2-dev procps libsodium-dev  libudunits2-dev
-
 RUN Rscript -e '\
     version; \
     options(repos = list(CRAN = "https://cloud.r-project.org/")); \
@@ -143,12 +143,12 @@ RUN Rscript -e '\
     renv::restore(clean = FALSE); \
 '
 
-#COPY .exec-shiny-app.R .exec-shiny-app.R
-#COPY .exec-shiny-app.R .exec-shiny-app.R.bak
-### Fix incorrect (windows) line-ending that keep this script from running on linux
-#RUN bash -c "sed $'s/\r$//' .exec-shiny-app.R.bak > .exec-shiny-app.R && \
-#    chmod +x .exec-shiny-app.R; \
-#"
+##COPY .exec-shiny-app.R .exec-shiny-app.R
+COPY .exec-shiny-app.R .exec-shiny-app.R.bak
+## Fix incorrect (windows) line-ending that keep this script from running on linux
+RUN bash -c "sed $'s/\r$//' .exec-shiny-app.R.bak > .exec-shiny-app.R && \
+    chmod +x .exec-shiny-app.R; \
+"
 
 RUN chmod +x /srv/shiny-server/$APP_NAME/.exec-shiny-app.R
 
