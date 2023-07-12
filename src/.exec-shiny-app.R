@@ -68,7 +68,8 @@ if (!dir.exists(local_lib)) {
     dir.create(local_lib)
 }
 
-if (dir.exists("renv")) {
+#if (dir.exists("renv")) {
+if (dir.exists("renv") && file.exists("../.Rprofile")) {
     local_lib <- paste0("renv/library/R-", version$major, ".", substr(version$minor,1,1), "/", version$platform)
     print(paste0("Use lib: ", local_lib))
     if (!require("renv")) {

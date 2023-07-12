@@ -2,7 +2,7 @@
   "providers": [
     "awscloudformation"
   ],
-  "projectName": "frontend",
+  "projectName": "amplifyfrontend",
   "version": "3.1",
   "frontend": "javascript",
   "javascript": {
