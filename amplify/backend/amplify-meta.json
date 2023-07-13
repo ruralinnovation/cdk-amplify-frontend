@@ -9,7 +9,59 @@
       "UnauthRoleName": "amplify-amplifyfrontend-dev-144943-unauthRole",
       "StackName": "amplify-amplifyfrontend-dev-144943",
       "StackId": "arn:aws:cloudformation:us-east-1:312512371189:stack/amplify-amplifyfrontend-dev-144943/ddcac5b0-20e4-11ee-9604-12776e59613f",
-      "AmplifyAppId": "dne8f868omkyd"
+      "AmplifyAppId": "dne8f868omkyd",
+      "NetworkStackS3Url": "https://s3.amazonaws.com/amplify-amplifyfrontend-dev-144943-deployment/amplify-cfn-templates/networkingStackTemplate.json"
+    }
+  },
+  "hosting": {
+    "ElasticContainer": {
+      "resourceName": "site",
+      "service": "ElasticContainer",
+      "providerPlugin": "awscloudformation",
+      "domain": "frontend-dev.ruralopportunitymap.us",
+      "restrictAccess": false,
+      "category": "hosting",
+      "categoryPolicies": [],
+      "dependsOn": [
+        {
+          "category": "",
+          "resourceName": "NetworkStack",
+          "attributes": [
+            "ClusterName",
+            "VpcId",
+            "VpcCidrBlock",
+            "SubnetIds",
+            "VpcLinkId",
+            "CloudMapNamespaceId"
+          ]
+        }
+      ],
+      "deploymentMechanism": "FULLY_MANAGED",
+      "environmentMap": {},
+      "mutableParametersState": {},
+      "exposedContainer": {
+        "name": "api",
+        "port": 3000
+      },
+      "output": {
+        "CloudfrontDistributionCnameDomainName": "frontend-dev.ruralopportunitymap.us",
+        "PipelineUrl": "https://us-east-1.console.aws.amazon.com/codesuite/codepipeline/pipelines/amplify-amplifyfrontend-dev-144943-site-service-api-3000/view",
+        "LoadBalancerCnameDomainName": "lb-amplify-amplifyfrontend-dev-144943.ruralopportunitymap.us",
+        "ServiceName": "site-service-api-3000",
+        "PipelineName": "amplify-amplifyfrontend-dev-144943-site-service-api-3000",
+        "ContainerNames": "api",
+        "ClusterName": "amplify-amplifyfrontend-dev-144943-NetworkStack-1O0U3DXMBNJRA-Cluster-ohMzDePeWl6Q",
+        "LoadBalancerAliasDomainName": "ampli-LoadB-C5LDSEYY3FY2-951164889.us-east-1.elb.amazonaws.com",
+        "CloudfrontDistributionAliasDomainName": "d2et60rjh6fxza.cloudfront.net"
+      },
+      "hostedZoneId": "Z3RWVYE3ORUBKA",
+      "iamAccessUnavailable": true,
+      "lastPushTimeStamp": "2023-07-12T22:28:15.683Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplifyfrontend-dev-144943-deployment/amplify-cfn-templates/hosting/container-template.json",
+        "logicalId": "hostingElasticContainer"
+      },
+      "lastPushDirHash": "bAL9WzDANsZrUGQI+4d40rc3z3E="
     }
   }
 }

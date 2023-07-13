@@ -1,1 +1,55 @@
-{}
+{
+  "hosting": {
+    "ElasticContainer": {
+      "category": "hosting",
+      "categoryPolicies": [],
+      "dependsOn": [
+        {
+          "attributes": [
+            "ClusterName",
+            "VpcId",
+            "VpcCidrBlock",
+            "SubnetIds",
+            "VpcLinkId",
+            "CloudMapNamespaceId"
+          ],
+          "category": "",
+          "resourceName": "NetworkStack"
+        }
+      ],
+      "deploymentMechanism": "FULLY_MANAGED",
+      "domain": "frontend-dev.ruralopportunitymap.us",
+      "environmentMap": {},
+      "exposedContainer": {
+        "name": "api",
+        "port": 3000
+      },
+      "hostedZoneId": "Z3RWVYE3ORUBKA",
+      "iamAccessUnavailable": true,
+      "mutableParametersState": {},
+      "output": {},
+      "providerPlugin": "awscloudformation",
+      "resourceName": "site",
+      "restrictAccess": false,
+      "service": "ElasticContainer"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_hosting_ElasticContainer_domain": {
+      "usedBy": [
+        {
+          "category": "hosting",
+          "resourceName": "ElasticContainer"
+        }
+      ]
+    },
+    "AMPLIFY_hosting_ElasticContainer_restrictAccess": {
+      "usedBy": [
+        {
+          "category": "hosting",
+          "resourceName": "ElasticContainer"
+        }
+      ]
+    }
+  }
+}
