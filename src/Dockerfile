@@ -83,14 +83,14 @@ ENV APP_NAME=frontend
 ARG gh_token
 ENV GITHUB_PAT=$gh_token
 
+RUN apt update -y && \
+    apt install -y ca-certificates libgdal-dev libharfbuzz-dev libfribidi-dev libv8-dev libjq-dev nano \
+    libmagick++-dev libprotobuf-dev protobuf-compiler libudunits2-dev procps libsodium-dev  libudunits2-dev
+
 #COPY --from=base /root/.cache/  /root/.cache/
 COPY --from=previous /root/.cache/  /root/.cache/
 #COPY --from=base /srv/shiny-server /srv/shiny-server
 COPY --from=previous /srv/shiny-server/$APP_NAME /srv/shiny-server/$APP_NAME
-
-RUN apt update -y && \
-    apt install -y ca-certificates libgdal-dev libharfbuzz-dev libfribidi-dev libv8-dev libjq-dev nano \
-    libmagick++-dev libprotobuf-dev protobuf-compiler libudunits2-dev procps libsodium-dev  libudunits2-dev
 
 WORKDIR /srv/shiny-server/$APP_NAME
 

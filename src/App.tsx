@@ -11,9 +11,7 @@ import aws_config from "./amplifyConfig";
 function App() {
 
   (function init () {
-    // Check access to react/vite environment variables
-    console.log("Welcome to Amplify React app version:", import.meta.env.VITE_APP_VERSION)
-    console.log(aws_config);
+    // DO SOME INIT HERE...
   });
 
   return (
