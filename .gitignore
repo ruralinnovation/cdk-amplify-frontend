@@ -59,25 +59,34 @@ vignettes/*.pdf
 *.rds
 *.Rds
 
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# production
 build
 dist
-fullstack-graphql-book
 logs
-node_modules
-package-lock.json
-packrat/lib*
-src/renv/lib*
-src/renv/sta*
-src/data
 
-*/backend/hosting/
+# testing
+coverage
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
 amplify/.config/local-*
 amplify/logs
 amplify/mock-data
-amplify/mock-api-resources
 amplify/backend/amplify-meta.json
 amplify/backend/.temp
 build/

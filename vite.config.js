@@ -2,11 +2,13 @@ import { defineConfig } from 'vite';
 import copy from '@guanghechen/rollup-plugin-copy';
 import del from 'rollup-plugin-delete'
 import react from '@vitejs/plugin-react';
+//import webWorkerLoader from 'rollup-plugin-web-worker-loader';
 
 // https://vitejs.dev/config/
 export default defineConfig({
     base: '',
     build: {
+        commonjsOptions: { include: [] },
         rollupOptions: {
             plugins: [
                 // Deletes previous assets
@@ -28,6 +30,9 @@ export default defineConfig({
         'aws_amplify', 'aws_amplify_react', 'aws_amplify_core',
         'Buffer', 'CustomEvent', 'HTMLWidgets', 'react', 'Shiny', 'shiny', 'shinyjs'
     ],
+    optimizeDeps: {
+        disabled: false,
+    },
     plugins: [
         // // Run before react() or svelte()
         // copy({
@@ -39,7 +44,9 @@ export default defineConfig({
 
         react({
             jsxRuntime: 'classic'
-        })
+        }),
+
+        //webWorkerLoader(/* configuration */),
     ],
     resolve: {
         alias: [

@@ -1,6 +1,7 @@
 import { CognitoIdToken } from 'amazon-cognito-identity-js';
-import { Auth, Hub } from 'aws-amplify';
-import { Logger } from 'aws-amplify';
+import { Amplify, Auth, Hub, Logger } from 'aws-amplify';
+import aws_config from "../amplifyConfig";
+
 const logger = new Logger('AmplifyService');
 
 export interface IClaims {
@@ -20,6 +21,12 @@ export default abstract class AmplifyService {
       logger.error('unable to get sdk creds', error);
       throw error;
     }
+  }
+
+  public static configure() {
+    console.log("Amplify configure: ", aws_config);
+    const config = Amplify.configure(aws_config);
+    return(aws_config);
   }
 
   public static async isAuthenticated(): Promise<boolean> {

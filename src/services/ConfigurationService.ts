@@ -1,4 +1,5 @@
 import { Auth, Logger } from 'aws-amplify';
+import AmplifyService from '../services/AmplifyService';
 
 interface ICognitoConfig {
   domain: string;
@@ -14,6 +15,7 @@ export default class ConfigurationService {
   loaded = false;
 
   // These properties are assigned from config.json
+  Auth: any = {};
   environment: string = '';
   region: string = '';
   apiUrl: string = '';
@@ -32,11 +34,11 @@ export default class ConfigurationService {
   }
 
   public async load() {
+    this.configureAmplify();
     const response = await fetch('/config.json');
     const cfg = await response.json();
+    console.log('Config fetched:', cfg);
     Object.assign(this, cfg);
-    console.log('Config Loaded');
-    this.configureAmplify();
     this.loaded = true;
   }
 
@@ -53,6 +55,19 @@ export default class ConfigurationService {
 
   private configureAmplify(): void {
     Logger.LOG_LEVEL = this.isLocal() || this.isDev() ? 'DEBUG' : 'INFO';
+
+    const cfg = AmplifyService.configure();
+
+    console.log('Config init:', cfg);
+
+    for (const c in this.cognito) {
+      if (cfg.Auth.hasOwnProperty(c)) {
+        (<any> this.cognito)[c] = (<any> cfg).Auth[c];
+      }
+    }
+
+    this.region = (<any> cfg).aws_project_region;
+
     const options = {
       Analytics: {
         disabled: true,

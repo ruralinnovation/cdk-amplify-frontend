@@ -3,8 +3,8 @@ import ConfigurationService from '../services/ConfigurationService';
 import { createContext } from 'react';
 
 export interface AppContextPropsType {
-  config: ConfigurationService;
   user: AuthUser | null;
+  config: ConfigurationService;
   updateAuthUser: (user: AuthUser | null) => void;
 }
 

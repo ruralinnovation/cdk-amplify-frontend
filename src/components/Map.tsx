@@ -1,42 +1,79 @@
-import { ApolloProvider, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { Box, Container } from '@mui/material';
-import { useEffect, useRef, useState } from 'react';
-import mapboxgl from 'mapbox-gl';
+import React, { useEffect, useRef, useState } from 'react';
 
+import county_summary_geojson from '../services/bcatQueries';
+
+import Map from 'react-map-gl';
 import {
-  broadband_unserved_blocks_geojson,
-  county_broadband_farm_bill_eligibility_geojson,
-  incumbent_electric_providers_geo_geojson,
-} from '../services/bcatQueries';
-import Map, { Layer, Source, FillLayer, LineLayer } from 'react-map-gl';
-
-// For more information on data-driven styles, see https://www.mapbox.com/help/gl-dds-ref/
-export const dataLayer1: LineLayer = {
-  id: 'county_broadband_farm_bill_eligibility_line_layer',
-  source: 'test',
-  type: 'line',
-  paint: {
-    'line-color': 'black',
-  },
-};
-export const dataLayer2: FillLayer = {
-  id: 'county_broadband_farm_bill_eligibility_fill_layer',
-  source: 'test',
-  type: 'fill',
-  paint: {
-    'fill-color': '#0080ff', // blue color fill
-    'fill-opacity': 0.5,
-  },
-};
+  Layer,
+  MapboxGeoJSONFeature,
+  MapRef, MapLayerMouseEvent, Source,
+  MapboxStyle,
+  NavigationControl,
+  Popup,
+  ScaleControl,
+  FullscreenControl,
+  GeolocateControl  } from 'react-map-gl';
+import bbox from '@turf/bbox';
+import { mapStyle, fillLayer, lineLayer } from './MapStyle';
+/* eslint import/no-webpack-loader-syntax: off */
+/* eslint-disable-next-line import/no-webpack-loader-syntax */
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* @ts-ignore */
+// import MapboxWorker from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker';
+import MapboxWorker from 'mapbox-gl/dist/mapbox-gl-csp-worker?worker';
+import mapboxgl from "mapbox-gl";
+// (mapboxgl as any).workerClass = new MapboxWorker();
 
 function MapContainer() {
-  const { loading, error, data } = useQuery(county_broadband_farm_bill_eligibility_geojson, {
+
+  const { loading, error, data } = useQuery(county_summary_geojson, {
     fetchPolicy: 'no-cache',
     variables: {
-      state_abbr: 'TN',
+      "geoid_co": "47047",
       skipCache: true,
     },
   });
+
+  // const mapRef = React.createRef();
+  const mapRef = useRef<MapRef>(null);
+  const [ popupInfo, setPopupInfo ] = useState<MapboxGeoJSONFeature | null>(null);
+
+  const onClick = (event: MapLayerMouseEvent) => {
+    if (!!event && typeof event === 'object' && typeof event.features === 'object') {
+      const feature: MapboxGeoJSONFeature = event.features[0];
+
+      event.originalEvent.stopPropagation();
+
+      if (feature) {
+        // calculate the bounding box of the feature
+        const [minLng, minLat, maxLng, maxLat] = bbox(feature);
+
+        (feature as any)['longitude'] = (minLng + maxLng) / 2;
+        (feature as any)['latitude'] = (minLat + maxLat) / 2;
+        (feature as any)['label'] = ((feature as any)['properties'] && (feature as any)['properties']['state_abbr']) ?
+          "Feature in " + (feature as any)['properties']['state_abbr']:
+          "Feature";
+
+        console.log("feature:", feature);
+
+        setPopupInfo(feature);
+
+        if (typeof mapRef.current === 'object' && mapRef.current !== null) {
+
+          mapRef.current.fitBounds(
+            [
+              [minLng, minLat],
+              [maxLng, maxLat],
+            ],
+            { padding: 40, duration: 1000 },
+          );
+        }
+      }
+    }
+
+  };
 
   useEffect(() => {
     console.log('ERROR ', error);
@@ -46,25 +83,31 @@ function MapContainer() {
     console.log('Data ', data);
   }, [data]);
 
-  if (loading) return <div>Loading Data</div>;
-
-  return (
-    <Container maxWidth="xl">
-      <Box sx={{ bgcolor: '#cfe8fc', height: '100vh' }}>
-        {data && (
+  if (typeof mapRef.current === 'object') { return (
+    <Container disableGutters maxWidth={false}>{/*maxWidth="xl">*/}
+      {data && (
+        <Box sx={{ bgcolor: '#cfe8fc', height: '100vh' }}>
           <Map
-            mapboxAccessToken="pk.eyJ1IjoibWVyZ2luZ2Z1dHVyZXMiLCJhIjoiY2tpNWhvdGNqMWk0bjJ6bnpmMGt4dm51YyJ9.i4MvF31Xr5fxscllkRx04w"
+            mapboxAccessToken="pk.eyJ1IjoicnVyYWxpbm5vIiwiYSI6ImNqeHl0cW0xODBlMm0zY2x0dXltYzRuazUifQ.zZBovoCHzLIW0wCZveEKzA"
+            mapStyle={{
+              ...mapStyle
+            } as MapboxStyle}
             initialViewState={{
               longitude: -86.503,
               latitude: 35.562,
               zoom: 7,
             }}
+            interactiveLayerIds={['county_broadband_farm_bill_eligibility_fill_layer']}
+            onClick={onClick}
+            ref={mapRef}
             style={{ width: '100%', height: '100vh' }}
-            mapStyle="mapbox://styles/mergingfutures/ckyn2t9jv0una14prs29fkgy2">
-            <Source type="geojson" id="test" data={data.county_broadband_farm_bill_eligibility_geojson}>
-              <Layer {...dataLayer1} />
-              <Layer {...dataLayer2} />
-            </Source>
+          >
+            {(!!data && data.hasOwnProperty("county_summary_geojson")) && (
+              <Source type="geojson" id="test" data={data.county_summary_geojson}>
+                <Layer {...fillLayer} />
+                <Layer {...lineLayer} />
+              </Source>
+            )}
             {/* {data.incumbent_electric_providers_geo_geojson.features.map((feature: any, i: number) => {
               return (
                 <Source key={`f-${i + 1}}`} type="geojson" id={`f-${i + 1}}`} data={feature}>
@@ -73,11 +116,33 @@ function MapContainer() {
                 </Source>
               );
             })} */}
+            <GeolocateControl position="top-left" />
+            <FullscreenControl position="top-left" />
+            <NavigationControl position="top-left" />
+            <ScaleControl />
+
+            {popupInfo && (popupInfo as any)['longitude'] && (popupInfo as any)['latitude'] && (popupInfo as any)['label'] && (
+              <Popup
+                anchor="top"
+                longitude={Number((popupInfo as any).longitude)}
+                latitude={Number((popupInfo as any).latitude)}
+                closeButton={true}
+                closeOnClick={true}
+                onClose={() => setPopupInfo(null)}
+              >
+                <div>
+                  <h3>{(popupInfo as any)['label'] }</h3>
+                </div>
+              </Popup>
+            )}
+
           </Map>
-        )}
-      </Box>
+        </Box>
+      )}
     </Container>
-  );
+  ) } else {
+    return <div>Loading Data</div>;
+  }
 }
 
 export default MapContainer;

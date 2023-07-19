@@ -7,12 +7,7 @@ frontend:
         - npm ci
     build:
       commands:
-        - echo "VITE_APP_VERSION=1" >> .env
-        - echo "VITE_AMP_BACKEND_API=${API_BACKEND}" >> .env
-        - echo "VITE_USER_POOL_ID=${USER_POOL_ID}" >> .env
-        - echo "VITE_USER_POOL_CLIENT_ID=${USER_POOL_CLIENT_ID}" >> .env
-        - echo "VITE_IDENTITY_POOL_ID=${IDENTITY_POOL_ID}" >> .env
-        - echo "VITE_REGION=${REGION}" >> .env
+        - echo $(cat .env)
         - npm run build
   artifacts:
     baseDirectory: dist
