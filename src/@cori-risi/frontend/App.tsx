@@ -88,7 +88,7 @@ function App ({ app_id, content, user }: { app_id: string, content: () => HTMLEl
         }
     }, [ user ]);
 
-    // const userBids = useSelector(selectUserBids);
+    const userBids = useSelector(selectUserBids);
 
     const artCollection = useSelector(selectCollection);
 
