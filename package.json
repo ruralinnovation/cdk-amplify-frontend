@@ -115,6 +115,6 @@
     "preview": "vite preview",
     "test": "vitest",
     "format": "prettier --write .",
-    "type-check": "tsc"
+    "type-check": "tsc --noEmit"
   }
 }
